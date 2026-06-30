@@ -9,17 +9,9 @@
 USE equipment_crm_db;
 
 -- ─── Users ───────────────────────────────────────────────────────────────────
--- password_hash được tạo bằng: password_hash('Admin@123', PASSWORD_DEFAULT)
 INSERT INTO users (name, email, password_hash, role, status) VALUES
-('Admin Hệ Thống', 'admin@rentalcrm.com',
- '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
- 'admin', 'active'),
-('Nhân Viên Kho',  'staff@rentalcrm.com',
- '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
- 'staff', 'active');
--- Lưu ý: hash trên tương ứng password 'password' (demo).
--- Khi chạy thật, hãy tạo hash riêng bằng PHP:
---   php -r "echo password_hash('Admin@123', PASSWORD_DEFAULT);"
+('Admin Hệ Thống', 'admin@rentalcrm.com','$2y$12$icLyuSK5zuj4by4RRluZ4u8t..YSR2CFtvJNnvsWCqSSHJFT7DI4m','admin', 'active'),
+('Nhân Viên Kho',  'staff@rentalcrm.com','$2y$12$P5/CuyRodgGCUzJ3k06AKOdA/M7RxgUv2VRfwF2XxY0i.rzjiE3NW','staff', 'active');
 
 -- ─── Customers (20 khách thuê mẫu) ──────────────────────────────────────────
 INSERT INTO customers (customer_code, name, email, phone, status, note) VALUES

@@ -43,7 +43,7 @@ function render(string $view, array $data = [], string $layout = 'layouts/main')
 function partial(string $name, array $data = []): void
 {
     extract($data);
-    require __DIR__ . '/../Views/partials/' . $name . '.php';
+    require_once __DIR__ . '/../Views/partials/' . $name . '.php';
 }
 
 // ─── Flash Messages ───────────────────────────────────────────────────────────
