@@ -69,6 +69,7 @@ $router->get('/dashboard',         [DashboardController::class,    'index']);
 // Public rental form (không cần đăng nhập, có honeypot/rate limit)
 $router->get('/public-rental/create', [PublicRentalController::class, 'create']);
 $router->post('/public-rental',       [PublicRentalController::class, 'store']);
+$router->get('/public-rental/thank-you', [PublicRentalController::class, 'thankYou']);
 
 // Module A: Customers (yêu cầu đăng nhập)
 $router->get('/customers',         [CustomerController::class,     'index']);
