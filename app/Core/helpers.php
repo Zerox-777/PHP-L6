@@ -168,25 +168,11 @@ function logout_clean(): void
 {
     // 1. Xóa tất cả session data
     $_SESSION = [];
-
-    // 2. Xóa cookie session trên browser
-    if (ini_get('session.use_cookies')) {
-        $params = session_get_cookie_params();
-        setcookie(
-            session_name(),
-            '',
-            time() - 42000,
-            $params['path'],
-            $params['domain'],
-            $params['secure'],
-            $params['httponly']
-        );
+    
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
     }
-
-    // 3. Destroy session
-    session_destroy();
 }
-
 // ─── Logging ──────────────────────────────────────────────────────────────────
 
 /**
