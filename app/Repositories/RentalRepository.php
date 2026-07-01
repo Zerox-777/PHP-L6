@@ -16,11 +16,15 @@ class RentalRepository
         $params = [];
 
         if ($keyword !== '') {
-            $sql .= " AND (r.rental_code    LIKE :keyword
-                       OR c.name            LIKE :keyword
-                       OR r.equipment_name  LIKE :keyword
-                       OR r.equipment_code  LIKE :keyword)";
-            $params['keyword'] = '%' . $keyword . '%';
+        $sql .= " AND (r.rental_code    LIKE :kw1
+                   OR c.name            LIKE :kw2
+                   OR r.equipment_name  LIKE :kw3
+                   OR r.equipment_code  LIKE :kw4)";
+            $like = '%' . $keyword . '%';
+            $params['kw1'] = $like;
+            $params['kw2'] = $like;
+            $params['kw3'] = $like;
+            $params['kw4'] = $like;
         }
         if ($status !== '') {
             $sql .= " AND r.status = :status";
@@ -67,11 +71,15 @@ class RentalRepository
         $params = [];
 
         if ($keyword !== '') {
-            $sql .= " AND (r.rental_code    LIKE :keyword
-                       OR c.name            LIKE :keyword
-                       OR r.equipment_name  LIKE :keyword
-                       OR r.equipment_code  LIKE :keyword)";
-            $params['keyword'] = '%' . $keyword . '%';
+            $sql .= " AND (r.rental_code    LIKE :kw1
+                       OR c.name            LIKE :kw2
+                       OR r.equipment_name  LIKE :kw3
+                       OR r.equipment_code  LIKE :kw4)";
+            $like = '%' . $keyword . '%';
+            $params['kw1'] = $like;
+            $params['kw2'] = $like;
+            $params['kw3'] = $like;
+            $params['kw4'] = $like;
         }
         if ($status !== '') {
             $sql .= " AND r.status = :status";

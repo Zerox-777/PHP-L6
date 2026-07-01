@@ -8,26 +8,30 @@ class CustomerRepository
     // ─── Count ───────────────────────────────────────────────────────────────
 
     public function countAll(string $keyword = '', string $status = ''): int
-    {
-        $sql    = "SELECT COUNT(*) AS total FROM customers WHERE 1=1";
-        $params = [];
+{
+    $sql    = "SELECT COUNT(*) AS total FROM customers WHERE 1=1";
+    $params = [];
 
-        if ($keyword !== '') {
-            $sql .= " AND (name LIKE :keyword
-                       OR customer_code LIKE :keyword
-                       OR email LIKE :keyword
-                       OR phone LIKE :keyword)";
-            $params['keyword'] = '%' . $keyword . '%';
-        }
-        if ($status !== '') {
-            $sql .= " AND status = :status";
-            $params['status'] = $status;
-        }
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return (int) ($stmt->fetch()['total'] ?? 0);
+    if ($keyword !== '') {
+        $sql .= " AND (name LIKE :kw1
+                   OR customer_code LIKE :kw2
+                   OR email LIKE :kw3
+                   OR phone LIKE :kw4)";
+        $like = '%' . $keyword . '%';
+        $params['kw1'] = $like;
+        $params['kw2'] = $like;
+        $params['kw3'] = $like;
+        $params['kw4'] = $like;
     }
+    if ($status !== '') {
+        $sql .= " AND status = :status";
+        $params['status'] = $status;
+    }
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return (int) ($stmt->fetch()['total'] ?? 0);
+}
 
     // ─── List with pagination ─────────────────────────────────────────────────
 
@@ -55,11 +59,15 @@ class CustomerRepository
         $params = [];
 
         if ($keyword !== '') {
-            $sql .= " AND (name LIKE :keyword
-                       OR customer_code LIKE :keyword
-                       OR email LIKE :keyword
-                       OR phone LIKE :keyword)";
-            $params['keyword'] = '%' . $keyword . '%';
+            $sql .= " AND (name LIKE :kw1
+                    OR customer_code LIKE :kw2
+                    OR email LIKE :kw3
+                    OR phone LIKE :kw4)";
+            $like = '%' . $keyword . '%';
+            $params['kw1'] = $like;
+            $params['kw2'] = $like;
+            $params['kw3'] = $like;
+            $params['kw4'] = $like;
         }
         if ($status !== '') {
             $sql .= " AND status = :status";
