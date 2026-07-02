@@ -6,11 +6,12 @@
 
 ## 🎯 Mô tả bài toán
 
-Hệ thống quản lý nội bộ cho dịch vụ cho thuê thiết bị quay phim/chụp ảnh chuyên nghiệp:
+Hệ thống CRM nội bộ cho một đơn vị cho thuê thiết bị quay phim/chụp ảnh chuyên nghiệp:
 
-- **Module A — Customers**: quản lý khách thuê, mã khách hàng (`customer_code`) không trùng.
-- **Module B — Rentals**: quản lý phiếu thuê thiết bị, mã phiếu (`rental_code`) không trùng, theo dõi trạng thái và hạn trả.
-- **Form công khai**: trang đăng ký tư vấn thuê thiết bị (`/public-rental/create`), không cần đăng nhập, có honeypot + rate limit chống spam.
+- **Khách thuê** (`customers`) — Module A: quản lý thông tin khách hàng, mã khách hàng unique, trạng thái hoạt động/blacklist.
+- **Phiếu thuê** (`rentals`) — Module B: quản lý phiếu thuê thiết bị, mã phiếu unique, theo dõi ngày mượn/hẹn trả/trả thực tế, cảnh báo quá hạn.
+- **Form công khai** (`inquiries`): khách vãng lai đăng ký thuê thiết bị không cần đăng nhập, có honeypot + rate limit chống spam.
+- **Xác thực nội bộ**: admin/staff đăng nhập bằng session, session được regenerate sau login, có timeout và logout sạch.
 
 ---
 
@@ -147,16 +148,35 @@ PHP-L6/
 ## 🗄️ Database Schema
 
 ### `users`
-PK `id`, UNIQUE `email`, `role` ENUM('admin','staff'), `status` ENUM('active','inactive'), timestamps.
+| Cột | Ràng buộc |
+|---|---|
+| id | PK, AUTO_INCREMENT |
+| email | **UNIQUE** |
+| role | ENUM('admin','staff') |
+| status | ENUM('active','inactive') |
 
-### `customers` (Module A)
-PK `id`, UNIQUE `customer_code`, INDEX `email`/`status`/`created_at`, `status` ENUM('active','inactive','blacklist'), timestamps.
+### `customers`
+| Cột | Ràng buộc |
+|---|---|
+| id | PK |
+| customer_code | **UNIQUE** |
+| status | ENUM('active','inactive','blacklist'), INDEX |
+| created_at | INDEX |
 
-### `rentals` (Module B)
-PK `id`, UNIQUE `rental_code`, FK `customer_id` → `customers(id)` (ON DELETE RESTRICT), INDEX `customer_id`/`status`/`rent_date`/`due_date`/`status+created_at`, `status` ENUM('active','returned','overdue','cancelled'), timestamps.
+### `rentals`
+| Cột | Ràng buộc |
+|---|---|
+| id | PK |
+| rental_code | **UNIQUE** |
+| customer_id | FK → `customers(id)` |
+| status | ENUM('active','returned','overdue','cancelled'), INDEX |
+| rent_date / due_date | INDEX |
 
 ### `inquiries` (form công khai)
-PK `id`, INDEX `email`/`status`/`created_at`, không yêu cầu FK bắt buộc (lead chưa qua xử lý).
+| Cột | Ràng buộc |
+|---|---|
+| id | PK |
+| email, status, created_at | INDEX |
 
 ---
 
@@ -226,7 +246,8 @@ ORDER BY r.created_at DESC
 LIMIT 10 OFFSET 0;
 ```
 
-*(Dán kết quả EXPLAIN thực tế + nhận xét cột `key` vào báo cáo PDF, mục T29/TC25.)*
+Khuyến khích: Chạy 2 câu trên sau khi đã `seed_data.php` (≥100 dòng) để cột `rows`/`key` trong `EXPLAIN` phản ánh đúng việc dùng index (`idx_customers_status`, `idx_rentals_status_created_at`...).
+
 
 ---
 
